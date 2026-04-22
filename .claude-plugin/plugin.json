@@ -1,0 +1,13 @@
+{
+  "name": "superwisdom-db",
+  "version": "0.1.0",
+  "description": "DB-backed adaptations of superwisdom skills — persist brainstorm/plan artifacts in Postgres instead of docs/plans/*.md",
+  "skills": [
+    "skills/brainstorm-db/SKILL.md",
+    "skills/plan-db/SKILL.md",
+    "skills/execute-db/SKILL.md",
+    "skills/review-db/SKILL.md",
+    "skills/debug-db/SKILL.md",
+    "skills/tdd-db/SKILL.md"
+  ]
+}

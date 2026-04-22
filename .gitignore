@@ -1,0 +1,4 @@
+# Session state (lib-common/session.sh writes under /tmp, but devs may override via env)
+.session/
+*.log
+.DS_Store
