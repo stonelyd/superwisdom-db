@@ -32,10 +32,31 @@ If the gate fails, STOP and report the message above to the user. Do not proceed
    d. If task has TDD intent, update `test_status='passing'` and `test_location='<path>'`.
    e. Commit (`git commit -m "feat(...): <task title>"`).
    f. Set `status='complete'`.
-4. After all tasks complete, mark the epic `status='complete'`.
+4. **Epic-close — Definition-of-Done gate (HARD GATE).** Before flipping the
+   epic to `complete`, run the wave DoD gate (Wave 24 / wi:1262). It enforces
+   the loose-ends discipline: no descendant left `in_progress`, and every
+   non-`complete` descendant is `deferred` with a non-empty why-note.
+
+   ```bash
+   scripts/check-wave-dod.sh <epic_id>   # exits non-zero if not closeable
+   if [ $? -ne 0 ]; then
+     echo "Cannot close epic #<epic_id> — file the loose ends first (docs/runbooks/loose-ends-ledger.md)."
+     exit 1
+   fi
+   ```
+
+   The script lives in the target repo (`subaya-platform`); run it from there.
+   If the repo has no such script, fall back to the equivalent SQL check:
+   no `in_progress` descendants AND every non-`complete` descendant is
+   `deferred` with non-empty `notes`.
+
+   Only when the gate passes, mark the epic `status='complete'`. Anything cut
+   becomes a `deferred` work_item linked to this epic (or a future-wave epic)
+   with a why-note — never silently dropped.
 
 ## Rules
 
 - Never proceed past the approval gate if the plan isn't approved.
+- Never close an epic that fails the Definition-of-Done gate.
 - Every code change pairs with a commit.
-- Work items move strictly forward through status (planned → in_progress → complete). Use `blocked` if truly stuck.
+- Work items move strictly forward through status (planned → in_progress → complete). Use `deferred` (with a why-note) for anything cut, or `blocked` if truly stuck.
